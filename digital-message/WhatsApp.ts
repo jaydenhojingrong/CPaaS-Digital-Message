@@ -7,7 +7,7 @@ async function postWhatsApp(message, key): Promise<MessageBirdResponse> {
       {
         method: 'POST',
         body: JSON.stringify({
-          to: '+6598162868',
+          to: '+6597820225',
           type: 'hsm',
           from: '0d80abd0-6ab4-4b51-b91c-a034d7c62669',
           content:{
