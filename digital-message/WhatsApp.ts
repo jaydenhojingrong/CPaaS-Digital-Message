@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import { isContext } from 'vm';
 import { MessageBirdResponse } from "./MessageBirdResponse";
 
-async function postWhatsApp(message, key, contactID, images_videos): Promise<MessageBirdResponse> {
+async function postWhatsApp(message, key, contactID, file, urlLink): Promise<MessageBirdResponse> {
     try {
       const response = await fetch('https://conversations.messagebird.com/v1/send',
       {
@@ -20,7 +20,7 @@ async function postWhatsApp(message, key, contactID, images_videos): Promise<Mes
               code: "en"
               },
             params: [
-              {default: message, images_videos}
+              {default: message}
             ]
             }
           }
