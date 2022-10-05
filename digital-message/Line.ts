@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { MessageBirdResponse } from "./MessageBirdResponse";
 
-async function postLine(message, key): Promise<MessageBirdResponse> {
+async function postLine(message, key, images_videos): Promise<MessageBirdResponse> {
     try {
       const response = await fetch('https://conversations.messagebird.com/v1/send',
       {
@@ -11,7 +11,7 @@ async function postLine(message, key): Promise<MessageBirdResponse> {
           type: 'text',
           from: '80f0206cddb44023a58f1eb7886cf7e0',
           content:{
-            text: message, 
+            text: message, images_videos
           }
         }),
         headers:{
