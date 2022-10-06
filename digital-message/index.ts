@@ -29,12 +29,12 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     for (const channel of channelList) {
 
       if (channel == "WhatsApp"){
-          mbResponse = await postWhatsApp(message, apiKey, contactID, file, urlLink);
+          mbResponse = await postWhatsApp(message, apiKey, contactID, urlTitle, urlHref);
           context.log(mbResponse);
         }
     
       else if (channel == "LINE"){
-        mbResponse = await postLine(message, apiKey, file, urlLink);
+        mbResponse = await postLine(message, apiKey, urlTitle, urlLink);
       }
 
       if( mbResponse["status"] == "accepted"){
