@@ -1,17 +1,19 @@
 import fetch from 'node-fetch';
 import { MessageBirdResponse } from "./MessageBirdResponse";
 
-async function postLine(message, key): Promise<MessageBirdResponse> {
+async function postLine(message, key, urlTitle, urlHref): Promise<MessageBirdResponse> {
     try {
       const response = await fetch('https://conversations.messagebird.com/v1/send',
       {
         method: 'POST',
         body: JSON.stringify({
-          to: 'Cc62c40d5f7d6075ef86bafde67f79331',
-          type: 'text',
-          from: '80f0206cddb44023a58f1eb7886cf7e0',
-          content:{
-            text: message, 
+          to: "C850665bea640b5a49c5c3675e7c0ec6f",
+          from: "17157f7ddfc242769621eb1bb79e5cbb",
+          type: "text",
+          content: {
+              text: `Hi there! Here's the lastest news on ${urlTitle}
+              \n${message}
+              \nFor more information, please click on the link ${urlHref}`
           }
         }),
         headers:{

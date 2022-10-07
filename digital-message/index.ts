@@ -30,7 +30,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         }
     
       else if (channel == "LINE"){
-        mbResponse = await postLine(message, apiKey);
+        mbResponse = await postLine(message, apiKey, urlTitle, urlHref);
       }
 
       if( mbResponse["status"] == "accepted"){
