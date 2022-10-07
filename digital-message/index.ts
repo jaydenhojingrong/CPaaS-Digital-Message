@@ -15,12 +15,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     const message = data[0];
     const channelList = data[1];
     const contactID = data[2];
-    const file = data[3];
-    const urlLink = data[4];
+    const images_videos = data[3];
     
-    const urlTitle = urlLink.title;
-    const urlHref = urlLink.href;
-
     let mbResponse: MessageBirdResponse;
     const channelSucceeded = {}
     const channelFailed = {}
@@ -29,12 +25,12 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     for (const channel of channelList) {
 
       if (channel == "WhatsApp"){
-          mbResponse = await postWhatsApp(message, apiKey, contactID, file, urlLink);
+          mbResponse = await postWhatsApp(message, apiKey, contactID, images_videos);
           context.log(mbResponse);
         }
     
       else if (channel == "LINE"){
-        mbResponse = await postLine(message, apiKey, file, urlLink);
+        mbResponse = await postLine(message, apiKey, images_videos);
       }
 
       if( mbResponse["status"] == "accepted"){
@@ -52,24 +48,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       else{
         code = 500;
       }
-      context.res = {
-        body: (JSON.stringify({
-          "code": code,
-          "channels_sent": channelList,
-          "channel_succeeded": channelSucceeded,
-          "channel_failed": channelFailed,
-          "message": message,
-          "file": file,
-          "urlLink": urlLink,
-        }))
-    };
-    }
 
-      context.log({"message": message,
-      "file": file.url,
-      "urlTitle": urlTitle,
-      "urlHref": urlHref
-      });
+      // context.log({"message": message,
+      // "images_videos": images_videos});
 
       // context.log(JSON.stringify({
       //   "code": code,
@@ -78,7 +59,18 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       //   "channel_failed": channelFailed,
       // }));
 
+      context.res = {
+          body: (JSON.stringify({
+            "code": code,
+            "channels_sent": channelList,
+            "channel_succeeded": channelSucceeded,
+            "channel_failed": channelFailed,
+            "message": message,
+            "images_videos": images_videos
+          }))
+      };
 
+    }
 };
 
 
