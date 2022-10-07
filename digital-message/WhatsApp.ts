@@ -1,8 +1,10 @@
 import fetch from 'node-fetch';
-import { isContext } from 'vm';
 import { MessageBirdResponse } from "./MessageBirdResponse";
 
-async function postWhatsApp(message, key, contactID): Promise<MessageBirdResponse> {
+async function postWhatsApp(message, key, contactID, urlTitle, urlLink): Promise<MessageBirdResponse> {
+  console.log("---------------------------------------");
+  console.log(urlLink);
+  console.log("---------------------------------------");
     try {
       const response = await fetch('https://conversations.messagebird.com/v1/send',
       {
@@ -14,14 +16,12 @@ async function postWhatsApp(message, key, contactID): Promise<MessageBirdRespons
           content:{
             hsm: {
               namespace: "320b2259_c43d_4d2b_966e_628d091cd90b",
-              templateName: "thanking",
+              templateName: "informational_news",
               language: {
               policy: "deterministic",
               code: "en"
               },
-            params: [
-              {default: message}
-            ]
+              params: [{ default: urlTitle }, { default: message }, { default: urlLink }],
             }
           }
         }),

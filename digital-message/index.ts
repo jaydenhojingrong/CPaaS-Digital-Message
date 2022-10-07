@@ -6,29 +6,34 @@ import { extractData } from "./DataExtractor";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-    const { apiKey } = process.env;
+    // const { apiKey } = process.env;
+    const apiKey = "Spg0nt3GILwAxHbVVKlxoKoMm";
     
     context.log('HTTP trigger function processing a request.');
-    // context.log(req.body);
 
     const data = extractData(req.body);
 
     const message = data[0];
     const channelList = data[1];
     const contactID = data[2];
+    const file = data[3];
+    const urlLink = data[4];
     
-    let mbResponse: MessageBirdResponse;
+    const urlTitle = urlLink.title;
+    const urlHref = urlLink.href;
+
     const channelSucceeded = {}
     const channelFailed = {}
+    
+    let mbResponse: MessageBirdResponse;
     let code = 0;
 
     for (const channel of channelList) {
 
       if (channel == "WhatsApp"){
-          mbResponse = await postWhatsApp(message, apiKey, contactID);
-          context.log(mbResponse);
-        }
-    
+        mbResponse = await postWhatsApp(message, apiKey, contactID, urlTitle, urlHref);
+        // context.log(mbResponse);
+      }
       else if (channel == "LINE"){
         mbResponse = await postLine(message, apiKey, urlTitle, urlHref);
       }
@@ -36,7 +41,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       if( mbResponse["status"] == "accepted"){
         channelSucceeded[channel] = mbResponse["status"]
       } 
-
       else {
         // insert error handling into this function
         channelFailed[channel] = mbResponse["status"]
@@ -64,6 +68,16 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             "channel_failed": channelFailed,
           }))
       };
+
+      context.log(
+        {
+          "message": message,
+        "file": file.url,
+        "urlTitle": urlTitle,
+        "urlHref": urlHref,
+        "contact": contactID,
+        "api": apiKey
+        });
 
     }
 };
