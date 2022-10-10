@@ -6,8 +6,7 @@ import { extractData } from "./DataExtractor";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-    // const { apiKey } = process.env;
-    const apiKey = "Spg0nt3GILwAxHbVVKlxoKoMm";
+    const { apiKey } = process.env;
     
     context.log('HTTP trigger function processing a request.');
 
