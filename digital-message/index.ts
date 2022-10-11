@@ -20,7 +20,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     
     const urlTitle = urlLink.title;
     const urlHref = urlLink.href;
-
+    const image = file.url;
+  
     let mbResponse: MessageBirdResponse;
     const channelSucceeded = {}
     const channelFailed = {}
@@ -29,7 +30,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     for (const channel of channelList) {
 
       if (channel == "WhatsApp"){
-          mbResponse = await postWhatsApp(message, apiKey, contactID, urlTitle, urlHref);
+          mbResponse = await postWhatsApp(message, apiKey, contactID, urlTitle, urlHref, image);
           context.log(mbResponse);
         }
     
