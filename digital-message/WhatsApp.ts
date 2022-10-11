@@ -1,10 +1,9 @@
 import fetch from 'node-fetch';
-import { isContext } from 'vm';
 import { MessageBirdResponse } from "./MessageBirdResponse";
 
 async function postWhatsApp(message, key, contactID, urlTitle, urlLink, image): Promise<MessageBirdResponse> {
-  try {
-    const response = await fetch('https://conversations.messagebird.com/v1/send',
+    try {
+      const response = await fetch('https://conversations.messagebird.com/v1/send',
       {
         method: 'POST',
         body: JSON.stringify({

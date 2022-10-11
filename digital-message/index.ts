@@ -7,8 +7,8 @@ import { extractData } from "./DataExtractor";
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
     const { apiKey } = process.env;
-    // context.log('HTTP trigger function processing a request.');
-    // context.log(req.body);
+    
+    context.log('HTTP trigger function processing a request.');
 
     const data = extractData(req.body);
 
@@ -17,23 +17,21 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     const contactID = data[2];
     const file = data[3];
     const urlLink = data[4];
-    
+    const image = file.url;
     const urlTitle = urlLink.title;
     const urlHref = urlLink.href;
-    const image = file.url;
-  
-    let mbResponse: MessageBirdResponse;
     const channelSucceeded = {}
     const channelFailed = {}
+    
+    let mbResponse: MessageBirdResponse;
     let code = 0;
 
     for (const channel of channelList) {
 
       if (channel == "WhatsApp"){
-          mbResponse = await postWhatsApp(message, apiKey, contactID, urlTitle, urlHref, image);
-          context.log(mbResponse);
-        }
-    
+        mbResponse = await postWhatsApp(message, apiKey, contactID, urlTitle, urlHref, image);
+        // context.log(mbResponse);
+      }
       else if (channel == "LINE"){
         mbResponse = await postLine(message, apiKey, urlTitle, urlHref);
       }
@@ -41,7 +39,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       if( mbResponse["status"] == "accepted"){
         channelSucceeded[channel] = mbResponse["status"]
       } 
-
       else {
         // insert error handling into this function
         channelFailed[channel] = mbResponse["status"]
@@ -53,24 +50,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       else{
         code = 500;
       }
-      context.res = {
-        body: (JSON.stringify({
-          "code": code,
-          "channels_sent": channelList,
-          "channel_succeeded": channelSucceeded,
-          "channel_failed": channelFailed,
-          "message": message,
-          "file": file,
-          "urlLink": urlLink,
-        }))
-    };
-    }
-
-      context.log({"message": message,
-      "file": file.url,
-      "urlTitle": urlTitle,
-      "urlHref": urlHref
-      });
 
       // context.log(JSON.stringify({
       //   "code": code,
@@ -79,7 +58,26 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
       //   "channel_failed": channelFailed,
       // }));
 
+      context.res = {
+          body: (JSON.stringify({
+            "code": code,
+            "channels_sent": channelList,
+            "channel_succeeded": channelSucceeded,
+            "channel_failed": channelFailed,
+          }))
+      };
 
+      context.log(
+        {
+        "message": message,
+        "file": image,
+        "urlTitle": urlTitle,
+        "urlHref": urlHref,
+        "contact": contactID,
+        "api": apiKey
+        });
+
+    }
 };
 
 

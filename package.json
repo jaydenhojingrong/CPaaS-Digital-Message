@@ -12,6 +12,7 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
+    "@types/node": "^18.7.19",
     "case": "^1.6.1",
     "node-fetch": "^2.6.7"
   },
