@@ -1,13 +1,13 @@
 import fetch from 'node-fetch';
 import { MessageBirdResponse } from "./MessageBirdResponse";
 
-async function postWhatsApp(message, key, contactID, urlTitle, urlLink, image): Promise<MessageBirdResponse> {
+async function whatsappImageText(key, to, message, urlTitle, urlLink, image): Promise<MessageBirdResponse> {
     try {
       const response = await fetch('https://conversations.messagebird.com/v1/send',
       {
         method: 'POST',
         body: JSON.stringify({
-          to: '+65' + contactID,
+          to: '+' + to,
           type: 'hsm',
           from: '0d80abd0-6ab4-4b51-b91c-a034d7c62669',
           content: {
@@ -74,4 +74,4 @@ async function postWhatsApp(message, key, contactID, urlTitle, urlLink, image): 
   }
 }
 
-export { postWhatsApp };
+export { whatsappImageText };
