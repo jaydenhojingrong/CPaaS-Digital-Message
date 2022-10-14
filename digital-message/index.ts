@@ -8,8 +8,7 @@ import { postMessage } from "./messageTemplate";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-  // const { apiKey } = process.env;
-  const apiKey = "Spg0nt3GILwAxHbVVKlxoKoMm";
+  const { apiKey } = process.env;
 
   const data = extractData(req.body);
   var message = data[0];
