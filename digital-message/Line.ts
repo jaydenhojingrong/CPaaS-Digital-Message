@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { MessageBirdResponse } from "./MessageBirdResponse";
 
-async function postLine(key, channelID, message, contentType, urlTitle, urlHref): Promise<MessageBirdResponse> {
+async function postLine(key, channelID, message, contentType): Promise<MessageBirdResponse> {
     try {
       const response = await fetch('https://conversations.messagebird.com/v1/send',
       {
@@ -11,9 +11,9 @@ async function postLine(key, channelID, message, contentType, urlTitle, urlHref)
           from: "17157f7ddfc242769621eb1bb79e5cbb",
           type: contentType,
           content: {
-            text: `Hi there! Here's the lastest news on ${urlTitle}
+            text: `Hi there! 
             \n${message}
-            \nFor more information, please click on the link ${urlHref}`
+            \n Thanks!`
      
           }
         }),
