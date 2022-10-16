@@ -1,6 +1,6 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import { messageContent, imageContent, videoContent, documentContent } from "./WhatsApp";
-import { postLine } from "./Line";
+import { line_message, line_image, line_video, line_file, line_richMessage } from "./Line";
 import { retrieveConatcts } from "./retrieveContacts";
 import { MessageBirdResponse } from "./MessageBirdResponse";
 import { extractData } from "./DataExtractor";
@@ -45,12 +45,27 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     const getContacts = mbResponse['items'];
     for (const contact of getContacts) {
       var getChannel = contact['lastName'];
-      
+
       //LINE
       if (line && getChannel == "LINE") {
         var to = contact["customDetails"]["custom1"];
-        var response = await postLine(apiKey, to, message, contentType);
-        // console.log("LINE" , response);
+        if (contentType == "text") {
+          var response = await line_message(apiKey, to, message);
+        }
+        else { 
+          if (contentType == "image" ) {
+            var response = await line_image(apiKey, to, contentType, mediaURL);
+          }
+          if (contentType == "video" ) {
+            var response = await line_video(apiKey, to, contentType, mediaURL);
+          }
+          if (contentType == "document" ) {
+            var response = await line_file(apiKey, to, mediaURL);
+          }
+          if (response) {
+            var response = await line_richMessage(apiKey, to, message);
+          }
+        }
       }
 
       //WHATSAPP
