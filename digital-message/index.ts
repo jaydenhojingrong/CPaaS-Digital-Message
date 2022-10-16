@@ -9,7 +9,6 @@ import { postMessage } from "./messageTemplate";
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
   const { apiKey } = process.env;
-
   /// calls extractDate function from DataExtractor
   const data = extractData(req.body);
   var message = data[0];
@@ -53,7 +52,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     for (const contact of getContacts) {
       var getChannel = contact['lastName'];
 
-      //LINE
+      // LINE
       if (line && getChannel == "LINE") {
         var to = contact["customDetails"]["custom1"];
         if (contentType == "text") {
@@ -82,6 +81,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
           if (contentType == "image") {
             var response = await imageContent(apiKey, to, contentType, message, mediaURL);
             console.log("in image");
+            console.log(to);
+            console.log(response);
           }
           else if (contentType == "video"){
             var response = await videoContent(apiKey, to, contentType, message, mediaURL);

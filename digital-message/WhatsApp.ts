@@ -99,7 +99,7 @@ async function imageContent(key, to, contentType, message, mediaURL): Promise<Me
                   type: "header",
                   parameters: [
                     {
-                      type: contentType,
+                      type: "image",
                       image: {
                         url: `${mediaURL}`
                       }
@@ -143,6 +143,7 @@ async function imageContent(key, to, contentType, message, mediaURL): Promise<Me
     return result as MessageBirdResponse;
   }
 }
+
 
 async function videoContent(key, to, contentType, message, mediaURL): Promise<MessageBirdResponse> {
   try {
