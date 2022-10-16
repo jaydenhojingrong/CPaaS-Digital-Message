@@ -7,9 +7,10 @@ async function messageContent(key, to, message): Promise<MessageBirdResponse> {
       {
         method: 'POST',
         body: JSON.stringify({
+
           to: '+' + to,
-          type: 'hsm',
-          from: '0d80abd0-6ab4-4b51-b91c-a034d7c62669',
+          type: "hsm",
+          from: "0d80abd0-6ab4-4b51-b91c-a034d7c62669",
           content: {
             hsm: {
               namespace: "320b2259_c43d_4d2b_966e_628d091cd90b",
@@ -38,17 +39,29 @@ async function messageContent(key, to, message): Promise<MessageBirdResponse> {
         }
       });
 
-    if (!response.ok) {
-      throw new Error(`Error!!!!!`);
-    }
+    // if (!response.ok) {
+    //   throw new Error(`Error!!!!!`);
+    // }
 
     const result = await response.json();
+
+    // new error handling should be moved to another file if possible
+    if (result["errors"].length > 0){
+      let error_message = result["errors"][0]["description"]
+      if (error_message == "Value is not a valid msisdn"){
+        let edited_error_message = to + " " + error_message;
+        throw edited_error_message
+      }
+      throw error_message        
+    }
+    
     return result as MessageBirdResponse;
 
   } catch (err) {
+    console.log(err)
     const result = {
       "id": "",
-      "status": "Invalid Recipient ID",
+      "status": err,
       "fallback": ""
     };
     return result as MessageBirdResponse;
@@ -103,17 +116,28 @@ async function imageContent(key, to, contentType, message, mediaURL): Promise<Me
         }
       });
 
-    if (!response.ok) {
-      throw new Error(`Error!!!!!`);
-    }
+    // if (!response.ok) {
+    //   throw new Error(`Error!!!!!`);
+    // }
 
     const result = await response.json();
+
+    // new error handling should be moved to another file if possible
+    if (result["errors"].length > 0){
+      let error_message = result["errors"][0]["description"]
+      if (error_message == "Value is not a valid msisdn"){
+        let edited_error_message = to + " " + error_message;
+        throw edited_error_message
+      }
+      throw error_message        
+    }
+
     return result as MessageBirdResponse;
 
   } catch (err) {
     const result = {
       "id": "",
-      "status": "Invalid Recipient ID",
+      "status": err,
       "fallback": ""
     };
     return result as MessageBirdResponse;
@@ -168,17 +192,28 @@ async function videoContent(key, to, contentType, message, mediaURL): Promise<Me
         }
       });
 
-    if (!response.ok) {
-      throw new Error(`Error!!!!!`);
-    }
+    // if (!response.ok) {
+    //   throw new Error(`Error!!!!!`);
+    // }
 
     const result = await response.json();
+
+    // new error handling should be moved to another file if possible
+    if (result["errors"].length > 0){
+      let error_message = result["errors"][0]["description"]
+      if (error_message == "Value is not a valid msisdn"){
+        let edited_error_message = to + " " + error_message;
+        throw edited_error_message
+      }
+      throw error_message        
+    }
+
     return result as MessageBirdResponse;
 
   } catch (err) {
     const result = {
       "id": "",
-      "status": "Invalid Recipient ID",
+      "status": err,
       "fallback": ""
     };
     return result as MessageBirdResponse;
@@ -233,17 +268,28 @@ async function documentContent(key, to, contentType, message, mediaURL): Promise
         }
       });
 
-    if (!response.ok) {
-      throw new Error(`Error!!!!!`);
-    }
+    // if (!response.ok) {
+    //   throw new Error(`Error!!!!!`);
+    // }
 
     const result = await response.json();
+
+    // new error handling should be moved to another file if possible
+    if (result["errors"].length > 0){
+      let error_message = result["errors"][0]["description"]
+      if (error_message == "Value is not a valid msisdn"){
+        let edited_error_message = to + " " + error_message;
+        throw edited_error_message
+      }
+      throw error_message        
+    }
     return result as MessageBirdResponse;
 
   } catch (err) {
+    
     const result = {
       "id": "",
-      "status": "Invalid Recipient ID",
+      "status": err,
       "fallback": ""
     };
     return result as MessageBirdResponse;

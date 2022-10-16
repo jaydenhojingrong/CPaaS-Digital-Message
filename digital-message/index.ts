@@ -10,11 +10,13 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
   const { apiKey } = process.env;
 
+  /// calls extractDate function from DataExtractor
   const data = extractData(req.body);
   var message = data[0];
   const channelList = data[1];
-  var contentType = data[2];
-  contentType = contentType.toString().toLowerCase();
+  var contentType = data[2].toString().toLowerCase();;
+
+  // response to return depending on success or failure
   const channelSucceeded = {}
   const channelFailed = {}
   let mbResponse: MessageBirdResponse;
@@ -22,7 +24,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   var line = false;
   var whatsapp = false;
   var richMedia = false;
-
+  
+  // if content type is image collect image URL 
   if (contentType != "text") {
     richMedia = true;
     var file = data[3];
@@ -31,6 +34,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     // var urlTitle = urlLink.title;
     // var urlHref = urlLink.href;
   }
+
+  // check which channels are selected
   for (const channel of channelList) {
     if (channel == "LINE") {
       line = true;
@@ -40,20 +45,22 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     }
   }
 
+  // if the data is not empty collect contacts from msgbird and send to contacts
   if (data) {
     mbResponse = await retrieveConatcts(apiKey);
     const getContacts = mbResponse['items'];
+
     for (const contact of getContacts) {
       var getChannel = contact['lastName'];
-      
-      //LINE
+
+      // LINE
       if (line && getChannel == "LINE") {
         var to = contact["customDetails"]["custom1"];
         var response = await postLine(apiKey, to, message, contentType);
         // console.log("LINE" , response);
       }
 
-      //WHATSAPP
+      // WHATSAPP
       if (whatsapp && getChannel == "WhatsApp") {
         var to = contact["msisdn"];
         if (richMedia) {
