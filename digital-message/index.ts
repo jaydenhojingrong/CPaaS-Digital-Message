@@ -1,121 +1,70 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
-import { messageContent, imageContent, videoContent, documentContent } from "./WhatsApp";
-import { line_message, line_image, line_video, line_file, line_richMessage } from "./Line";
-import { retrieveConatcts } from "./retrieveContacts";
-import { MessageBirdResponse } from "./MessageBirdResponse";
-import { extractData } from "./DataExtractor";
-import { postMessage } from "./messageTemplate";
+import { retrieveContacts } from "./services/RetrieveContacts";
+import { MessageBirdResponse } from "./interfaces/MessageBirdResponse";
+import { extractData } from "./services/DataExtractor";
+import { CpaasResponse } from "./interfaces/CpaasResponse";
+import { routeMessage } from "./services/RouteMessage";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
   const { apiKey } = process.env;
-  /// calls extractDate function from DataExtractor
-  const data = extractData(req.body);
-  var message = data[0];
-  const channelList = data[1];
-  var contentType = data[2].toString().toLowerCase();;
 
-  // response to return depending on success or failure
   const channelSucceeded = {}
   const channelFailed = {}
   let mbResponse: MessageBirdResponse;
-  let code = 0;
-  var line = false;
-  var whatsapp = false;
-  var richMedia = false;
+  let cpaasResponse: CpaasResponse;
+  let code: number;
+  var isLine:boolean = false;
+  var isWhatsapp:boolean = false;
+  var isRichMedia:boolean = false;
+
+  /// calls extractData function from DataExtractor
+  const data = extractData(req.body);
+  const message = data[0];
+  const channelList = data[1];
+  const contentType = data[2].toString().toLowerCase();
   
-  // if content type is image collect image URL 
+  // if content type is not text.. collect URL 
   if (contentType != "text") {
-    richMedia = true;
+    isRichMedia = true;
     var file = data[3];
     var mediaURL = file.url;
-    // var urlLink = data[4];
-    // var urlTitle = urlLink.title;
-    // var urlHref = urlLink.href;
   }
 
   // check which channels are selected
-  for (const channel of channelList) {
-    if (channel == "LINE") {
-      line = true;
-    } 
-    if (channel == "WhatsApp") {
-      whatsapp = true;
-    }
+  if (channelList.includes("LINE")){
+    isLine = true;
   }
+  if (channelList.includes("WhatsApp")){
+    isWhatsapp = true;
+  } 
 
-  // if the data is not empty collect contacts from msgbird and send to contacts
+  // if the data (from payload) is not empty collect contacts from msgbird and send to contacts
   if (data) {
-    mbResponse = await retrieveConatcts(apiKey);
+    mbResponse = await retrieveContacts(apiKey);
     const getContacts = mbResponse['items'];
 
+    // for each contact.. get the channel from the last name
     for (const contact of getContacts) {
       var getChannel = contact['lastName'];
+      
+      mbResponse = await routeMessage(contact, isLine, isWhatsapp, isRichMedia, getChannel, contentType, apiKey, message, mediaURL);
 
-      // LINE
-      if (line && getChannel == "LINE") {
-        var to = contact["customDetails"]["custom1"];
-        if (contentType == "text") {
-          var response = await line_message(apiKey, to, message);
-        }
-        else { 
-          if (contentType == "image" ) {
-            var response = await line_image(apiKey, to, contentType, mediaURL);
-          }
-          if (contentType == "video" ) {
-            var response = await line_video(apiKey, to, contentType, mediaURL);
-          }
-          if (contentType == "document" ) {
-            var response = await line_file(apiKey, to, mediaURL);
-          }
-          if (response) {
-            var response = await line_richMessage(apiKey, to, message);
-          }
-        }
+      if (mbResponse["status"] == "accepted") {
+        channelSucceeded[getChannel] = mbResponse["status"];
       }
+      else if (mbResponse["status"] != "skip") {
+        // insert error handling into this function
+        channelFailed[getChannel] = mbResponse["status"];
+      }
+      
+    }
 
-      // WHATSAPP
-      if (whatsapp && getChannel == "WhatsApp") {
-        var to = contact["msisdn"];
-        if (richMedia) {
-          if (contentType == "image") {
-            var response = await imageContent(apiKey, to, contentType, message, mediaURL);
-            console.log("in image");
-            console.log(to);
-            console.log(response);
-          }
-          else if (contentType == "video"){
-            var response = await videoContent(apiKey, to, contentType, message, mediaURL);
-            console.log("in video");
-          }
-          else {
-            var response = await documentContent(apiKey, to, contentType, message, mediaURL);
-            console.log("in file");
-          }
-        }
-        else {
-          var response = await messageContent(apiKey, to, message);
-          console.log("in text");
-        }
-        // console.log("WHATSAPP" , response);
-      }
-
-      if(response){
-        if (response["status"] == "accepted") {
-          channelSucceeded[getChannel] = response["status"];
-        }
-        else {
-          // insert error handling into this function
-          channelFailed[getChannel] = response["status"];
-        }
-  
-        if (Object.keys(channelFailed).length === 0) {
-          code = 200;
-        }
-        else {
-          code = 500;
-        }
-      }
+    if (Object.keys(channelFailed).length === 0) {
+      code = 200;
+    }
+    else {
+      code = 500;
     }
   }
 
@@ -126,25 +75,17 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   //   "channel_failed": channelFailed,
   // }));
 
+  cpaasResponse = {
+    "code": code,
+    "channels_sent": channelList,
+    "channel_succeeded": channelSucceeded,
+    "channel_failed": channelFailed,
+  }
+
   context.res = {
-    body: (JSON.stringify({
-      "code": code,
-      "channels_sent": channelList,
-      "channel_succeeded": channelSucceeded,
-      "channel_failed": channelFailed,
-    }))
+    status: code,
+    body: (JSON.stringify(cpaasResponse))
   };
-
-  // context.log(
-  //   {
-  //     "message": message,
-  //     "file": image,
-  //     "urlTitle": urlTitle,
-  //     "urlHref": urlHref,
-  //     "contact": contactID,
-  //     "api": apiKey
-  //   });
-
 };
 
 

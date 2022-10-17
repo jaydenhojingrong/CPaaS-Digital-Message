@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
-import { MessageBirdResponse } from "./MessageBirdResponse";
+import { MessageBirdResponse } from "../interfaces/MessageBirdResponse";
+
+const mbLineChannelID = "cfe72aa08a9c42659bc7851e6a82a79b";
 
 async function line_message(key, channelID, message): Promise<MessageBirdResponse> {
   try {
@@ -8,7 +10,7 @@ async function line_message(key, channelID, message): Promise<MessageBirdRespons
         method: 'POST',
         body: JSON.stringify({
           to: channelID,
-          from: "17157f7ddfc242769621eb1bb79e5cbb",
+          from: mbLineChannelID,
           type: "text",
           content: {
             text: `Hi there! 
@@ -42,7 +44,7 @@ async function line_richMessage(key, channelID, message): Promise<MessageBirdRes
         method: 'POST',
         body: JSON.stringify({
           to: channelID,
-          from: "17157f7ddfc242769621eb1bb79e5cbb",
+          from: mbLineChannelID,
           type: "text",
           content: {
             text: `Hi there! 
@@ -77,7 +79,7 @@ async function line_image(key, channelID, contentType, mediaURL): Promise<Messag
         method: 'POST',
         body: JSON.stringify({
           to: channelID,
-          from: "17157f7ddfc242769621eb1bb79e5cbb",
+          from: mbLineChannelID,
           type: "image",
           content: {
             image: {
@@ -92,10 +94,13 @@ async function line_image(key, channelID, contentType, mediaURL): Promise<Messag
       });
 
     if (!response.ok) {
+      
       throw new Error(`Error! status: ${response.status}`);
     }
 
+    
     const result = await response.json();
+    
     return result as MessageBirdResponse;
 
   } catch (err) {
@@ -110,7 +115,7 @@ async function line_video(key, channelID, contentType, mediaURL): Promise<Messag
         method: 'POST',
         body: JSON.stringify({
           to: channelID,
-          from: "17157f7ddfc242769621eb1bb79e5cbb",
+          from: mbLineChannelID,
           type: "video",
           content: {
             video: {
@@ -143,7 +148,7 @@ async function line_file(key, channelID, mediaURL): Promise<MessageBirdResponse>
         method: 'POST',
         body: JSON.stringify({
           to: channelID,
-          from: "17157f7ddfc242769621eb1bb79e5cbb",
+          from: mbLineChannelID,
           type: "text",
           content: {
             text: mediaURL
@@ -168,8 +173,3 @@ async function line_file(key, channelID, mediaURL): Promise<MessageBirdResponse>
 }
 
 export { line_message, line_image, line_video, line_file, line_richMessage};
-
-
-  // `Hi there! Here's the lastest news on ${urlTitle}
-  // \n${message}
-  // \nFor more information, please click on the link ${urlHref}`

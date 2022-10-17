@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
-import { MessageBirdResponse } from "./MessageBirdResponse";
+import { MessageBirdResponse } from "../interfaces/MessageBirdResponse";
 
-async function retrieveConatcts(key): Promise<MessageBirdResponse> {
+async function retrieveContacts(key): Promise<MessageBirdResponse> {
     try {
         const response = await fetch('https://rest.messagebird.com/contacts',
         {
@@ -24,4 +24,4 @@ async function retrieveConatcts(key): Promise<MessageBirdResponse> {
       }
     }
 
-export { retrieveConatcts };
+export { retrieveContacts };

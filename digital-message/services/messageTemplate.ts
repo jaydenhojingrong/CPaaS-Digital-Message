@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { MessageBirdResponse } from "./MessageBirdResponse";
+import { MessageBirdResponse } from "../interfaces/MessageBirdResponse";
 
 async function postMessage(key, from, to, message, urlTitle, urlHref): Promise<MessageBirdResponse> {
     try {
