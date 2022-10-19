@@ -1,5 +1,5 @@
 import { messageContent, imageContent, videoContent, documentContent } from "../services/WhatsApp";
-import { line_message, line_image, line_video, line_file, line_richMessage } from "../services/Line";
+import { line_message, line_image, line_video, line_file } from "../services/Line";
 import { MessageBirdResponse } from "../interfaces/MessageBirdResponse";
 
 // return true if message is sent
@@ -18,16 +18,18 @@ async function routeMessage(contact, isLine, isWhatsapp, isRichMedia, getChannel
         }
         else if (contentType == "image" ) {
             mbResponse = await line_image(apiKey, to, contentType, mediaURL);
+            message = "Please refer to the image attached \n\n" + message
+            mbResponse = await line_message(apiKey, to, message);
         }
         else if (contentType == "video" ) {
             mbResponse = await line_video(apiKey, to, contentType, mediaURL);
+            message = "Please refer to the video attached \n\n" + message
+            mbResponse = await line_message(apiKey, to, message);
         }
         else if (contentType == "document" ) {
             mbResponse = await line_file(apiKey, to, mediaURL);
         }
-        else if (mbResponse) {
-            mbResponse = await line_richMessage(apiKey, to, message);
-        }
+
         return mbResponse;
     }
 
