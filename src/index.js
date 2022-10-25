@@ -36,12 +36,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.testcontact = exports.testWhatsappFunctionFour = exports.testWhatsappFunctionThree = exports.testWhatsappFunctionTwo = exports.testWhatsappFunctionOne = exports.check = exports.add = void 0;
+exports.testLinecontact = exports.testcontact = exports.testLINEFunctionThree = exports.testLINEFunctionTwo = exports.testLINEFunctionOne = exports.testWhatsappFunctionFour = exports.testWhatsappFunctionThree = exports.testWhatsappFunctionTwo = exports.testWhatsappFunctionOne = exports.check = exports.add = exports.makeRequest = void 0;
 var WhatsApp_1 = require("../digital-message/services/WhatsApp");
 var WhatsApp_2 = require("../digital-message/services/WhatsApp");
 var WhatsApp_3 = require("../digital-message/services/WhatsApp");
 var WhatsApp_4 = require("../digital-message/services/WhatsApp");
+var Line_1 = require("../digital-message/services/Line");
+var Line_2 = require("../digital-message/services/Line");
+var Line_3 = require("../digital-message/services/Line");
 var retrieveContacts_1 = require("../digital-message/services/retrieveContacts");
+var node_fetch_1 = require("node-fetch");
+function makeRequest() {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, (0, node_fetch_1["default"])('http://localhost:7071/api/health')];
+                case 1:
+                    response = _a.sent();
+                    return [2 /*return*/, response.status]; // 👉️ 200
+                case 2:
+                    err_1 = _a.sent();
+                    console.log(err_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.makeRequest = makeRequest;
 function add(numbers) {
     var mobile = numbers;
     var count = numbers.length;
@@ -78,7 +103,7 @@ function testWhatsappFunctionTwo() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, WhatsApp_2.imageContent)('Spg0nt3GILwAxHbVVKlxoKoMm', '6583685216', 'image/png', 'hi', 'https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt5dc0dc4e42905d70/634c03d196c0500f0511b5f6/cat.png')];
+                case 0: return [4 /*yield*/, (0, WhatsApp_2.imageContent)('Spg0nt3GILwAxHbVVKlxoKoMm123', '6583685216', 'image/png', 'hi', 'https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt5dc0dc4e42905d70/634c03d196c0500f0511b5f6/cat.png')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -93,7 +118,7 @@ function testWhatsappFunctionThree() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, WhatsApp_3.videoContent)('Spg0nt3GILwAxHbVVKlxoKoMm/123', '6583685216', 'Video', 'hi', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4')];
+                case 0: return [4 /*yield*/, (0, WhatsApp_3.videoContent)('Spg0nt3GILwAxHbVVKlxoKoMm123', '6583685216', 'Video', 'hi', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -108,7 +133,7 @@ function testWhatsappFunctionFour() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, WhatsApp_4.documentContent)('Spg0nt3GILwAxHbVVKlxoKoMm/123', '6583685216', 'Document', 'hi', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltab4224846f2fae19/634a2e67c473a75d5c5e76ea/Schroders_transcript.pdf')];
+                case 0: return [4 /*yield*/, (0, WhatsApp_4.documentContent)('Spg0nt3GILwAxHbVVKlxoKoMm123', '6583685216', 'Document', 'hi', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltab4224846f2fae19/634a2e67c473a75d5c5e76ea/Schroders_transcript.pdf')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -118,6 +143,51 @@ function testWhatsappFunctionFour() {
     });
 }
 exports.testWhatsappFunctionFour = testWhatsappFunctionFour;
+function testLINEFunctionOne() {
+    return __awaiter(this, void 0, void 0, function () {
+        var content, value;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, Line_1.line_message)('Spg0nt3GILwAxHbVVKlxoKoMm123', 'cfe72aa08a9c42659bc7851e6a82a79b', 'hi')];
+                case 1:
+                    content = _a.sent();
+                    value = content["status"];
+                    return [2 /*return*/, value];
+            }
+        });
+    });
+}
+exports.testLINEFunctionOne = testLINEFunctionOne;
+function testLINEFunctionTwo() {
+    return __awaiter(this, void 0, void 0, function () {
+        var content, value;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, Line_2.line_image)('Spg0nt3GILwAxHbVVKlxoKoMm123', 'cfe72aa08a9c42659bc7851e6a82a79b', 'image', 'https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltd201a6de6c6cb58c/631f5165ad808074367e0a6f/olivia.png')];
+                case 1:
+                    content = _a.sent();
+                    value = content["status"];
+                    return [2 /*return*/, value];
+            }
+        });
+    });
+}
+exports.testLINEFunctionTwo = testLINEFunctionTwo;
+function testLINEFunctionThree() {
+    return __awaiter(this, void 0, void 0, function () {
+        var content, value;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, Line_3.line_video)('Spg0nt3GILwAxHbVVKlxoKoMm123', 'cfe72aa08a9c42659bc7851e6a82a79b', 'Video', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4')];
+                case 1:
+                    content = _a.sent();
+                    value = content["status"];
+                    return [2 /*return*/, value];
+            }
+        });
+    });
+}
+exports.testLINEFunctionThree = testLINEFunctionThree;
 function testcontact() {
     return __awaiter(this, void 0, void 0, function () {
         var hi, items, loop, dict, i;
@@ -139,4 +209,26 @@ function testcontact() {
     });
 }
 exports.testcontact = testcontact;
-console.log(testcontact());
+function testLinecontact() {
+    return __awaiter(this, void 0, void 0, function () {
+        var hi, items, loop, dictCustom, i;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, retrieveContacts_1.retrieveContacts)('Spg0nt3GILwAxHbVVKlxoKoMm')];
+                case 1:
+                    hi = _a.sent();
+                    items = hi["items"];
+                    loop = "";
+                    dictCustom = [];
+                    for (i = 0; i < items.length; i++) {
+                        loop = items[i]["customDetails"];
+                        if (items[i]["lastName"] == 'LINE') {
+                            dictCustom.push(loop["custom1"]);
+                        }
+                    }
+                    return [2 /*return*/, dictCustom];
+            }
+        });
+    });
+}
+exports.testLinecontact = testLinecontact;

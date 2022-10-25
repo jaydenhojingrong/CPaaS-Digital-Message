@@ -2,7 +2,22 @@ import { messageContent } from '../digital-message/services/WhatsApp';
 import { imageContent } from '../digital-message/services/WhatsApp';
 import { videoContent } from '../digital-message/services/WhatsApp';
 import { documentContent } from '../digital-message/services/WhatsApp';
+import { line_message } from '../digital-message/services/Line';
+import { line_image } from '../digital-message/services/Line';
+import { line_video } from '../digital-message/services/Line';
 import { retrieveContacts } from "../digital-message/services/retrieveContacts";
+import fetch from 'node-fetch';
+
+export async function makeRequest() {
+    try {
+      const response = await fetch('http://localhost:7071/api/health');
+      return response.status // 👉️ 200
+  
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  
 
 export function add(numbers: string){
     let mobile = numbers;
@@ -49,6 +64,26 @@ export async function testWhatsappFunctionFour(){
     return value
 }
 
+export async function testLINEFunctionOne(){
+    var content = await line_message('Spg0nt3GILwAxHbVVKlxoKoMm123','cfe72aa08a9c42659bc7851e6a82a79b','hi');
+    var value = content["status"]
+    return value
+}
+
+export async function testLINEFunctionTwo(){
+    var content = await line_image('Spg0nt3GILwAxHbVVKlxoKoMm123','cfe72aa08a9c42659bc7851e6a82a79b','image','https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltd201a6de6c6cb58c/631f5165ad808074367e0a6f/olivia.png');
+    var value = content["status"]
+    return value
+}
+
+export async function testLINEFunctionThree(){
+    var content = await line_video('Spg0nt3GILwAxHbVVKlxoKoMm123','cfe72aa08a9c42659bc7851e6a82a79b','Video','https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4');
+    var value = content["status"]
+    return value
+}
+
+
+
 export async function testcontact(){
     var hi =  await retrieveContacts('Spg0nt3GILwAxHbVVKlxoKoMm');
     var items = hi["items"]
@@ -61,6 +96,22 @@ export async function testcontact(){
 
     return dict
 }
+
+export async function testLinecontact(){
+    var hi =  await retrieveContacts('Spg0nt3GILwAxHbVVKlxoKoMm');
+    var items = hi["items"]
+    var loop = ""
+    var dictCustom = []
+    for (let i = 0; i < items.length; i++) {
+        loop= items[i]["customDetails"]
+        if (items[i]["lastName"] == 'LINE'){
+        dictCustom.push(loop["custom1"])
+        }
+     }
+    return dictCustom
+    }
+
+
 
 
  

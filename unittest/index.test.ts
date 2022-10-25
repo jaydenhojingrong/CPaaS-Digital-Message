@@ -1,10 +1,12 @@
-import { add } from '../src/index';
+import { add, testLINEFunctionOne, testLINEFunctionThree, testLINEFunctionTwo } from '../src/index';
 import { check } from '../src/index';
 import { testcontact } from '../src/index';
+import { testLinecontact } from '../src/index';
 import { testWhatsappFunctionOne } from '../src/index';
 import { testWhatsappFunctionTwo } from '../src/index';
 import { testWhatsappFunctionThree } from '../src/index';
 import { testWhatsappFunctionFour } from '../src/index';
+import { makeRequest } from '../src/index';
 import { messageContent } from '../digital-message/services/WhatsApp';
 import { MessageBirdResponse } from "../digital-message/interfaces/MessageBirdResponse";
 import { resourceLimits } from 'worker_threads';
@@ -30,11 +32,24 @@ describe('testing channel', () => {
   });
 });
 
+it('health checker', async () => {
+  expect.assertions(1);
+  const data = await makeRequest();
+  expect(data).toEqual(200);
+});
+
 it('Retrieve contacts', async () => {
-  expect.assertions(2);
+  expect.assertions(1);
   const data = await testcontact();
-  expect(data).toEqual(expect.arrayContaining(["LINE"]))  
-  expect(data).toEqual(expect.arrayContaining(["WhatsApp"]))  
+  const channels = ['WhatsApp', 'LINE']
+  expect(data).toEqual(expect.not.arrayContaining(channels))  
+  
+});
+
+it('Retrieve LINE contacts', async () => {
+  expect.assertions(1);
+  const data = await testLinecontact();
+  expect(data).not.toEqual(expect.arrayContaining(["null"]))  
 });
 
 it('works with whatsappFunction1', async () => {
@@ -58,6 +73,24 @@ it('works with whatsappFunction3', async () => {
 it('works with whatsappFunction4', async () => {
   expect.assertions(1);
   const data = await testWhatsappFunctionFour();
+  expect(data).toEqual('accepted');
+});
+
+it('works with LINEFunction1', async () => {
+  expect.assertions(1);
+  const data = await testLINEFunctionOne();
+  expect(data).toEqual('accepted');
+});
+
+it('works with LINEFunction2', async () => {
+  expect.assertions(1);
+  const data = await testLINEFunctionTwo();
+  expect(data).toEqual('accepted');
+});
+
+it('works with LINEFunction3', async () => {
+  expect.assertions(1);
+  const data = await testLINEFunctionThree();
   expect(data).toEqual('accepted');
 });
 

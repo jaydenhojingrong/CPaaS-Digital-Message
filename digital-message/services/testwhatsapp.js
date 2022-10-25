@@ -73,3 +73,27 @@ function testcontact() {
     });
 }
 console.log(testcontact());
+function testLinecontact() {
+    return __awaiter(this, void 0, void 0, function () {
+        var hi, items, loop, dictCustom, i;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, retrieveContacts_1.retrieveContacts)('Spg0nt3GILwAxHbVVKlxoKoMm')];
+                case 1:
+                    hi = _a.sent();
+                    items = hi["items"];
+                    loop = "";
+                    dictCustom = [];
+                    for (i = 0; i < items.length; i++) {
+                        loop = items[i]["customDetails"];
+                        if (items[i]["lastName"] == 'LINE') {
+                            dictCustom.push(loop["custom1"]);
+                        }
+                    }
+                    console.log(dictCustom);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+console.log(testLinecontact());
