@@ -57,6 +57,7 @@ async function messageContent(key, to, message): Promise<MessageBirdResponse> {
       "fallback": ""
     };
     return result as MessageBirdResponse;
+  
   }
 }
 
