@@ -9,7 +9,6 @@ export async function makeRequest() {
       return response.status // 👉️ 200
   
     } catch (err) {
-      console.log(err);
     }
   }
   
@@ -79,11 +78,9 @@ export async function testcontact(){
     if (dicTrue.includes('False')) {
         final = "False"
     }
-    console.log(final)
     return final
     }
 
-console.log(testcontact())
 
 
 export async function testLinecontact(){
@@ -104,7 +101,6 @@ export async function testLinecontact(){
         dictvalue = dictCustom[k]
         dictLength.push(dictvalue.length)
     }
-    console.log(dictLength)
     for (let a = 0; a < dictLength.length; a++){
         if (dictLength[a] == '0'){
           returnValue = "False"
@@ -112,7 +108,6 @@ export async function testLinecontact(){
         else {
             returnValue = "True"
         }
-        console.log(returnValue)
     return returnValue
       }
 }
