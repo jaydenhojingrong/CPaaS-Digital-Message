@@ -5,6 +5,7 @@ function extractData(payload) {
         payload["data"]["entry"]["content_type"],
         payload["data"]["entry"]["rich_media"],
         // payload["data"]["entry"]["link_file"]
+        // payload["data"]["entry"]["group_id"]  or something
     ];
 
 }

@@ -23,6 +23,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   const message = data[0];
   const channelList = data[1];
   const contentType = data[2].toString().toLowerCase();
+  // add new groupID const 
+  // const groupID = data[3]
   
   // if content type is not text.. collect URL 
   if (contentType != "text") {
@@ -40,7 +42,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   } 
 
   // if the data (from payload) is not empty collect contacts from msgbird and send to contacts
-  if (data) {
+  if (data) {                                 //add groupID para
     mbResponse = await retrieveContacts(apiKey);
     const getContacts = mbResponse['items'];
 
