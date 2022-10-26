@@ -37,9 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.testLinecontact = exports.testcontact = exports.testLINEFunctionThree = exports.testLINEFunctionTwo = exports.testLINEFunctionOne = exports.testWhatsappFunctionFour = exports.testWhatsappFunctionThree = exports.testWhatsappFunctionTwo = exports.testWhatsappFunctionOne = exports.makeRequest = void 0;
-var WhatsApp_1 = require("../digital-message/services/WhatsApp");
-var Line_1 = require("../digital-message/services/Line");
-var retrieveContacts_1 = require("../digital-message/services/retrieveContacts");
+var WhatsApp_1 = require("../../digital-message/services/WhatsApp");
+var Line_1 = require("../../digital-message/services/Line");
+var RetrieveContacts_1 = require("../../digital-message/services/RetrieveContacts");
 var node_fetch_1 = require("node-fetch");
 function makeRequest() {
     return __awaiter(this, void 0, void 0, function () {
@@ -172,7 +172,7 @@ function testcontact() {
         var hi, items, loop, dict, returnNum, dicTrue, final, i, z;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, retrieveContacts_1.retrieveContacts)('Spg0nt3GILwAxHbVVKlxoKoMm')];
+                case 0: return [4 /*yield*/, (0, RetrieveContacts_1.retrieveContacts)('Spg0nt3GILwAxHbVVKlxoKoMm')];
                 case 1:
                     hi = _a.sent();
                     items = hi["items"];
@@ -210,7 +210,7 @@ function testLinecontact() {
         var hi, items, loop, dictCustom, dictvalue, dictLength, returnValue, i, k, a;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, retrieveContacts_1.retrieveContacts)('Spg0nt3GILwAxHbVVKlxoKoMm')];
+                case 0: return [4 /*yield*/, (0, RetrieveContacts_1.retrieveContacts)('Spg0nt3GILwAxHbVVKlxoKoMm')];
                 case 1:
                     hi = _a.sent();
                     items = hi["items"];

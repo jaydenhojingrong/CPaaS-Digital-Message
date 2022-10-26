@@ -1,6 +1,6 @@
-import { messageContent, imageContent, videoContent, documentContent } from '../digital-message/services/WhatsApp';
-import { line_message, line_image, line_video } from '../digital-message/services/Line';
-import { retrieveContacts } from "../digital-message/services/retrieveContacts";
+import { messageContent, imageContent, videoContent, documentContent } from '../../digital-message/services/WhatsApp';
+import { line_message, line_image, line_video } from '../../digital-message/services/Line';
+import { retrieveContacts } from '../../digital-message/services/RetrieveContacts';
 import fetch from 'node-fetch';
 
 export async function makeRequest() {
@@ -119,5 +119,3 @@ export async function testLinecontact(){
 
 
 
-
- 
