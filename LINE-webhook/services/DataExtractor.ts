@@ -7,8 +7,19 @@ function extractData(payload) {
 
         eventType = payload["events"][0]["type"];
 
-        if (eventType != "follow" && eventType != "unfollow"){
+        // only follow, unfollow and message event is tracked
+
+        if (eventType != "follow" && eventType != "unfollow" && eventType != "message"){
             throw "Data not recognized";
+        }
+
+        if (eventType == "message"){
+            // message? get userid + messages
+                return [
+                    eventType,
+                    payload["events"][0]["message"]["text"],
+                    payload["events"][0]["source"]["userId"]
+                ];
         }
         return [
             eventType,
@@ -18,9 +29,7 @@ function extractData(payload) {
         
     }
     catch(err){
-        console.log("ooooooo");
         throw "Data not recognized";
-
     }
         
 
