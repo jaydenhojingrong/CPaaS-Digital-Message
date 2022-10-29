@@ -7,7 +7,9 @@ import { routeMessage } from "./services/RouteMessage";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-  const { apiKey } = process.env;
+  // const { apiKey } = process.env;
+
+  const apiKey = "Spg0nt3GILwAxHbVVKlxoKoMm"
 
   const channelSucceeded = {}
   const channelFailed = {}
@@ -23,8 +25,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   const message = data[0];
   const channelList = data[1];
   const contentType = data[2].toString().toLowerCase();
-  // add new groupID const 
-  // const groupID = data[3]
+  const audienceGroup = data[4]
   
   // if content type is not text.. collect URL 
   if (contentType != "text") {
@@ -42,25 +43,29 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   } 
 
   // if the data (from payload) is not empty collect contacts from msgbird and send to contacts
-  if (data) {                                 //add groupID para
-    mbResponse = await retrieveContacts(apiKey);
-    const getContacts = mbResponse['items'];
+  if (data) {
+    // going through the list of audienceGroup 
+    for (const audience of audienceGroup){
 
-    // for each contact.. get the channel from the last name
-    for (const contact of getContacts) {
-      var getChannel = contact['lastName'];
-      
-      mbResponse = await routeMessage(contact, isLine, isWhatsapp, isRichMedia, getChannel, contentType, apiKey, message, mediaURL);
+      mbResponse = await retrieveContacts(apiKey,audience);
+      const getContacts = mbResponse['items'];
+      // for each contact.. get the channel from the last name
+      for (const contact of getContacts) {
+        var getChannel = contact['lastName'];
+        
+        mbResponse = await routeMessage(contact, isLine, isWhatsapp, isRichMedia, getChannel, contentType, apiKey, message, mediaURL);
 
-      if (mbResponse["status"] == "accepted") {
-        channelSucceeded[getChannel] = mbResponse["status"];
+        if (mbResponse["status"] == "accepted") {
+          channelSucceeded[getChannel] = mbResponse["status"];
+        }
+        else if (mbResponse["status"] != "skip") {
+          // insert error handling into this function
+          channelFailed[getChannel] = mbResponse["status"];
+        }
+        
       }
-      else if (mbResponse["status"] != "skip") {
-        // insert error handling into this function
-        channelFailed[getChannel] = mbResponse["status"];
-      }
-      
     }
+
 
     if (Object.keys(channelFailed).length === 0) {
       code = 200;

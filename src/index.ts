@@ -55,7 +55,7 @@ export async function testLINEFunctionThree(){
 }
 
 export async function testcontact(){
-    var hi =  await retrieveContacts('Spg0nt3GILwAxHbVVKlxoKoMm');
+    var hi =  await retrieveContacts('Spg0nt3GILwAxHbVVKlxoKoMm',"Insurance");
     var items = hi["items"]
     var loop = ""
     var dict = []
@@ -84,7 +84,7 @@ export async function testcontact(){
 
 
 export async function testLinecontact(){
-    var hi =  await retrieveContacts('Spg0nt3GILwAxHbVVKlxoKoMm');
+    var hi =  await retrieveContacts('Spg0nt3GILwAxHbVVKlxoKoMm',"Insurance");
     var items = hi["items"]
     var loop = ""
     var dictCustom = []
