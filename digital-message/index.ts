@@ -7,9 +7,7 @@ import { routeMessage } from "./services/RouteMessage";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
 
-  // const { apiKey } = process.env;
-
-  const apiKey = "Spg0nt3GILwAxHbVVKlxoKoMm"
+  const { apiKey } = process.env;
 
   const channelSucceeded = {}
   const channelFailed = {}
