@@ -1,15 +1,17 @@
 import fetch from 'node-fetch';
 import { MessageBirdResponse } from "../interfaces/MessageBirdResponse";
 
-const groupHash = {
-  "Intermediary": "eef8b666f7d94e22ab2d40616d3c42d5",
-  "Insurance": "006207f33d864379bb0a9983ab6a6295",
-  "Instituional": "a40a9359637a4fee88816123681735ad",
-  "All topics": "110a4f3ac6854659876b794b5393f9e5",
-};
 
 async function retrieveContacts(key,audience): Promise<MessageBirdResponse> {
     try {
+        // check for spelling when making new group
+        const groupHash = {
+          "Intermediary": "eef8b666f7d94e22ab2d40616d3c42d5",
+          "Insurance": "006207f33d864379bb0a9983ab6a6295",
+          "Institutional": "a40a9359637a4fee88816123681735ad",
+          "All topics": "110a4f3ac6854659876b794b5393f9e5",
+        };
+        
         const groupID = groupHash[audience]
         const messagebirdContactURL = ' https://rest.messagebird.com/groups/' + groupID + '/contacts';
         const response = await fetch(messagebirdContactURL,

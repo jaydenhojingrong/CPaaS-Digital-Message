@@ -19,6 +19,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
   var isRichMedia:boolean = false;
 
   /// calls extractData function from DataExtractor
+
   const data = extractData(req.body);
   const message = data[0];
   const channelList = data[1];
@@ -42,25 +43,33 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
   // if the data (from payload) is not empty collect contacts from msgbird and send to contacts
   if (data) {
+    // use hashmap to remove duplicates
+    const contactMap = {};
     // going through the list of audienceGroup 
     for (const audience of audienceGroup){
-
       mbResponse = await retrieveContacts(apiKey,audience);
       const getContacts = mbResponse['items'];
-      // for each contact.. get the channel from the last name
+      // going through list of contacts in audienceGroups
       for (const contact of getContacts) {
-        var getChannel = contact['lastName'];
-        
-        mbResponse = await routeMessage(contact, isLine, isWhatsapp, isRichMedia, getChannel, contentType, apiKey, message, mediaURL);
+        // append to hashmap using unique msisdn as key
+        // const msisdn = contact["msisdn"]
+        contactMap[contact["msisdn"]] = contact
+        // Object.assign(contactMap, {msisdn: contact});       
+      }
+    }
 
-        if (mbResponse["status"] == "accepted") {
-          channelSucceeded[getChannel] = mbResponse["status"];
-        }
-        else if (mbResponse["status"] != "skip") {
-          // insert error handling into this function
-          channelFailed[getChannel] = mbResponse["status"];
-        }
-        
+    for (var contactMsisdn in contactMap){
+      var contact = contactMap[contactMsisdn]
+      // for each contact.. get the channel from the last name
+      var getChannel = contact['lastName'];
+      mbResponse = await routeMessage(contact, isLine, isWhatsapp, isRichMedia, getChannel, contentType, apiKey, message, mediaURL);
+
+      if (mbResponse["status"] == "accepted") {
+        channelSucceeded[getChannel] = mbResponse["status"];
+      }
+      else if (mbResponse["status"] != "skip") {
+        // insert error handling into this function
+        channelFailed[getChannel] = mbResponse["status"];
       }
     }
 

@@ -4,8 +4,8 @@ function extractData(payload) {
         payload["data"]["entry"]["channels_to_publish"],
         payload["data"]["entry"]["content_type"],
         payload["data"]["entry"]["rich_media"],
-        // payload["data"]["entry"]["link_file"]
         payload["data"]["entry"]["audience_group"]   
+        // payload["data"]["entry"]["link_file"]
     ];
 
 }
