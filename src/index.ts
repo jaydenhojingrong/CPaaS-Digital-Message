@@ -13,25 +13,25 @@ export async function makeRequest() {
   }
   
 export async function testWhatsappFunctionOne(){
-    var content = await messageContent('OD9JjrVluF4ON00310kMWXJLa123','6583685216','hi');
+    var content = await messageContent('OD9JjrVluF4ON00310kMWXJLa','6583685216','hi');
     var value = content["status"]
     return value
 }
 
 export async function testWhatsappFunctionTwo(){
-    var content = await imageContent('OD9JjrVluF4ON00310kMWXJLa123','6583685216','image/png','hi','https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt5dc0dc4e42905d70/634c03d196c0500f0511b5f6/cat.png');
+    var content = await imageContent('OD9JjrVluF4ON00310kMWXJLa','6583685216','image/png','hi','https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt5dc0dc4e42905d70/634c03d196c0500f0511b5f6/cat.png');
     var value = content["status"]
     return value
 }
 
 export async function testWhatsappFunctionThree(){
-    var content = await videoContent('OD9JjrVluF4ON00310kMWXJLa123','6583685216','Video','hi','https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4');
+    var content = await videoContent('OD9JjrVluF4ON00310kMWXJLa','6583685216','Video','hi','https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4');
     var value = content["status"]
     return value
 }
 
 export async function testWhatsappFunctionFour(){
-    var content = await documentContent('OD9JjrVluF4ON00310kMWXJLa123','6583685216','Document','hi','https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltab4224846f2fae19/634a2e67c473a75d5c5e76ea/Schroders_transcript.pdf');
+    var content = await documentContent('OD9JjrVluF4ON00310kMWXJLa','6583685216','Document','hi','https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltab4224846f2fae19/634a2e67c473a75d5c5e76ea/Schroders_transcript.pdf');
     var value = content["status"]
     return value
 }
