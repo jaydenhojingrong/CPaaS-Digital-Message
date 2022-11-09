@@ -1,5 +1,5 @@
 import { testLINEFunctionOne, testLINEFunctionThree, testLINEFunctionTwo } from '../src/index';
-import { testcontact, makeRequest } from '../src/index';
+import { testcontact, makeRequest, overall } from '../src/index';
 import { testWhatsappFunctionOne, testWhatsappFunctionTwo, testWhatsappFunctionThree, testWhatsappFunctionFour } from '../src/index';
 import { testLinecontact } from '../src/index';
 
@@ -20,6 +20,12 @@ it('Retrieve LINE custom value -> Check if custom value is not null', async () =
   const customdata = await testLinecontact();
   expect(customdata).toEqual('True')
 
+});
+
+it('Overall function', async () => {
+  expect.assertions(1);
+  const data = await overall();
+  expect(data).toEqual(200);
 });
 
 it('Whatsapp -> Check if status is accpeted (text)', async () => {

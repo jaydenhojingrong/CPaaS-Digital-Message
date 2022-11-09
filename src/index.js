@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.testLinecontact = exports.testcontact = exports.testLINEFunctionThree = exports.testLINEFunctionTwo = exports.testLINEFunctionOne = exports.testWhatsappFunctionFour = exports.testWhatsappFunctionThree = exports.testWhatsappFunctionTwo = exports.testWhatsappFunctionOne = exports.makeRequest = void 0;
+exports.testLinecontact = exports.testcontact = exports.testLINEFunctionThree = exports.testLINEFunctionTwo = exports.testLINEFunctionOne = exports.testWhatsappFunctionFour = exports.testWhatsappFunctionThree = exports.testWhatsappFunctionTwo = exports.testWhatsappFunctionOne = exports.overall = exports.makeRequest = void 0;
 var WhatsApp_1 = require("../digital-message/services/WhatsApp");
 var Line_1 = require("../digital-message/services/Line");
 var retrieveContacts_1 = require("../digital-message/services/retrieveContacts");
@@ -54,7 +54,6 @@ function makeRequest() {
                     return [2 /*return*/, response.status]; // 👉️ 200
                 case 2:
                     err_1 = _a.sent();
-                    console.log(err_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -62,12 +61,89 @@ function makeRequest() {
     });
 }
 exports.makeRequest = makeRequest;
+function createUser() {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, result, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 3, , 4]);
+                    return [4 /*yield*/, (0, node_fetch_1["default"])('https://cpaas-digital-message.azurewebsites.net/api/digital-message', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                data: {
+                                    entry: {
+                                        channels_to_publish: [
+                                            "LINE"
+                                        ],
+                                        audience_group: [
+                                            "Institutional"
+                                        ],
+                                        content_type: "Text",
+                                        created_at: "2022-10-12T06:10:16.157Z",
+                                        created_by: "blt437013b967bb61fc",
+                                        link_file: {
+                                            title: "",
+                                            href: ""
+                                        },
+                                        messages: "This is a testing message",
+                                        rich_media: null
+                                    }
+                                }
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Accept: 'application/json'
+                            }
+                        })];
+                case 1:
+                    response = _a.sent();
+                    if (!response.ok) {
+                        throw new Error("Error! status: ".concat(response.status));
+                    }
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    result = (_a.sent());
+                    console.log('result is: ', JSON.stringify(result, null, 4));
+                    return [2 /*return*/, result];
+                case 3:
+                    error_1 = _a.sent();
+                    if (error_1 instanceof Error) {
+                        console.log('error message: ', error_1.message);
+                        return [2 /*return*/, error_1.message];
+                    }
+                    else {
+                        console.log('unexpected error: ', error_1);
+                        return [2 /*return*/, 'An unexpected error occurred'];
+                    }
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+function overall() {
+    return __awaiter(this, void 0, void 0, function () {
+        var funcValue, overallValue;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, createUser()];
+                case 1:
+                    funcValue = _a.sent();
+                    overallValue = funcValue["code"];
+                    return [2 /*return*/, overallValue];
+            }
+        });
+    });
+}
+exports.overall = overall;
+console.log(overall());
 function testWhatsappFunctionOne() {
     return __awaiter(this, void 0, void 0, function () {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, WhatsApp_1.messageContent)('Spg0nt3GILwAxHbVVKlxoKoMm/123', '6583685216', 'hi')];
+                case 0: return [4 /*yield*/, (0, WhatsApp_1.messageContent)('OD9JjrVluF4ON00310kMWXJLa', '6583685216', 'hi')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -82,7 +158,7 @@ function testWhatsappFunctionTwo() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, WhatsApp_1.imageContent)('Spg0nt3GILwAxHbVVKlxoKoMm123', '6583685216', 'image/png', 'hi', 'https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt5dc0dc4e42905d70/634c03d196c0500f0511b5f6/cat.png')];
+                case 0: return [4 /*yield*/, (0, WhatsApp_1.imageContent)('OD9JjrVluF4ON00310kMWXJLa', '6583685216', 'image/png', 'hi', 'https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt5dc0dc4e42905d70/634c03d196c0500f0511b5f6/cat.png')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -97,7 +173,7 @@ function testWhatsappFunctionThree() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, WhatsApp_1.videoContent)('Spg0nt3GILwAxHbVVKlxoKoMm123', '6583685216', 'Video', 'hi', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4')];
+                case 0: return [4 /*yield*/, (0, WhatsApp_1.videoContent)('OD9JjrVluF4ON00310kMWXJLa', '6583685216', 'Video', 'hi', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -112,7 +188,7 @@ function testWhatsappFunctionFour() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, WhatsApp_1.documentContent)('Spg0nt3GILwAxHbVVKlxoKoMm123', '6583685216', 'Document', 'hi', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltab4224846f2fae19/634a2e67c473a75d5c5e76ea/Schroders_transcript.pdf')];
+                case 0: return [4 /*yield*/, (0, WhatsApp_1.documentContent)('OD9JjrVluF4ON00310kMWXJLa', '6583685216', 'Document', 'hi', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltab4224846f2fae19/634a2e67c473a75d5c5e76ea/Schroders_transcript.pdf')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -127,7 +203,7 @@ function testLINEFunctionOne() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, Line_1.line_message)('Spg0nt3GILwAxHbVVKlxoKoMm', 'Uba3d02f75bbe48738a9c47926a2f173d/', 'hi')];
+                case 0: return [4 /*yield*/, (0, Line_1.line_message)('OD9JjrVluF4ON00310kMWXJLa', 'Uba3d02f75bbe48738a9c47926a2f173d/', 'hi')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -142,7 +218,7 @@ function testLINEFunctionTwo() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, Line_1.line_image)('Spg0nt3GILwAxHbVVKlxoKoMm', 'Uba3d02f75bbe48738a9c47926a2f173d/', 'image', 'https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltd201a6de6c6cb58c/631f5165ad808074367e0a6f/olivia.png')];
+                case 0: return [4 /*yield*/, (0, Line_1.line_image)('OD9JjrVluF4ON00310kMWXJLa', 'Uba3d02f75bbe48738a9c47926a2f173d/', 'image', 'https://eu-images.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltd201a6de6c6cb58c/631f5165ad808074367e0a6f/olivia.png')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -157,7 +233,7 @@ function testLINEFunctionThree() {
         var content, value;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, Line_1.line_video)('Spg0nt3GILwAxHbVVKlxoKoMm', 'Uba3d02f75bbe48738a9c47926a2f173d/', 'Video', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4')];
+                case 0: return [4 /*yield*/, (0, Line_1.line_video)('OD9JjrVluF4ON00310kMWXJLa', 'Uba3d02f75bbe48738a9c47926a2f173d/', 'Video', 'https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/blt2bfc06495cdfb725/634a28328f37810f03d5b749/catVideo.mp4')];
                 case 1:
                     content = _a.sent();
                     value = content["status"];
@@ -172,7 +248,7 @@ function testcontact() {
         var hi, items, loop, dict, returnNum, dicTrue, final, i, z;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, retrieveContacts_1.retrieveContacts)('Spg0nt3GILwAxHbVVKlxoKoMm')];
+                case 0: return [4 /*yield*/, (0, retrieveContacts_1.retrieveContacts)('OD9JjrVluF4ON00310kMWXJLa', "Insurance")];
                 case 1:
                     hi = _a.sent();
                     items = hi["items"];
@@ -197,20 +273,18 @@ function testcontact() {
                     if (dicTrue.includes('False')) {
                         final = "False";
                     }
-                    console.log(final);
                     return [2 /*return*/, final];
             }
         });
     });
 }
 exports.testcontact = testcontact;
-console.log(testcontact());
 function testLinecontact() {
     return __awaiter(this, void 0, void 0, function () {
         var hi, items, loop, dictCustom, dictvalue, dictLength, returnValue, i, k, a;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, retrieveContacts_1.retrieveContacts)('Spg0nt3GILwAxHbVVKlxoKoMm')];
+                case 0: return [4 /*yield*/, (0, retrieveContacts_1.retrieveContacts)('OD9JjrVluF4ON00310kMWXJLa', "Insurance")];
                 case 1:
                     hi = _a.sent();
                     items = hi["items"];
@@ -229,7 +303,6 @@ function testLinecontact() {
                         dictvalue = dictCustom[k];
                         dictLength.push(dictvalue.length);
                     }
-                    console.log(dictLength);
                     for (a = 0; a < dictLength.length; a++) {
                         if (dictLength[a] == '0') {
                             returnValue = "False";
@@ -237,7 +310,6 @@ function testLinecontact() {
                         else {
                             returnValue = "True";
                         }
-                        console.log(returnValue);
                         return [2 /*return*/, returnValue];
                     }
                     return [2 /*return*/];
