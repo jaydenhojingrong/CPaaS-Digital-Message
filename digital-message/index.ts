@@ -47,7 +47,8 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     const contactMap = {};
     // going through the list of audienceGroup 
     for (const audience of audienceGroup){
-      mbResponse = await retrieveContacts(apiKey,audience);
+
+      mbResponse = await retrieveContacts(apiKey, audience);
       const getContacts = mbResponse['items'];
       // going through list of contacts in audienceGroups
       for (const contact of getContacts) {

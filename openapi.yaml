@@ -1,0 +1,418 @@
+openapi: 3.0.1
+info:
+  title: Cpaas POC CMSWebhookListener - SMU
+  version: v0.0.1
+paths:
+  /api/Health:
+    get:
+      tags:
+        - Health
+      summary: Route can be used to check CMSWebhookListener health
+      parameters: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Health200'
+  /api/digital_message:
+    post:
+      tags:
+        - Digital_Message
+      summary: ContentStack Digital Message Webhook
+      requestBody:
+        required: true
+        description: Payload that Publish/Unpublish ContentStack event sends
+        content:
+          application/json:
+            schema: {}
+            examples:
+              PublishContentData:
+                $ref: '#/components/examples/PublishContentData'
+      responses:
+        '200':
+          description: Workflow stage change webhook response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content_type_uid:
+                    type: string
+                  entry_uid:
+                    type: string
+                  updated_entry_uids:
+                    type: array
+                    items:
+                      type: string
+                  affected_entries:
+                    type: integer
+              example:
+                code: 200
+                channel_sent: [ "LINE", "WhatsApp"]
+                channel_suceeded: {"LINE": "accepted", "WhatsApp": "accepted"}
+                channel_failed: {}
+                
+        '500':
+          description: Error in processing of Syndication function
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                code: 500
+                channel_sent: [ "LINE", "WhatsApp"]
+                channel_suceeded: {"LINE": "accepted"}
+                channel_failed: {"WhatsApp": "949949484746276883Value is not a valid misdn"}
+  /api/LINE-webhook:
+    post:
+      tags:
+        - LINE Welcome Flow
+      summary: Route can be used to receive payload from LINE OA
+      requestBody:
+        required: true
+        description: Payload that Publish/Unpublish ContentStack event sends
+        content:
+          application/json:
+            schema: {}
+            examples:
+              PublishContentData:
+                $ref: '#/components/examples/LineEventPayload'
+      responses:
+        '200':
+          description: Workflow stage change webhook response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                LINE Contact added to MessageBird Group (ID:1)
+        '100':
+          description: System can ignore this request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+               Message received but no action required
+        '500':
+          description: Error in processing of Syndication function
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+               Data not recognized
+    
+components:
+  parameters:
+    Health:
+      name: name
+      in: query
+      description: Name param in query params
+      schema:
+        type: string
+  responses:
+    Health200:
+      description: Healthcheck response
+      content:
+        text/plain:
+          schema:
+            type: string
+          example: 200
+    BadRequest:
+      description: >-
+        Response status code indicates that the server cannot or will not
+        process the request due to something that is perceived to be a client
+        error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            system_message: Bad request
+  examples:
+    LineEventPayload:
+      description: Example payload that LINE sends when a follower wishes to subscribe
+      value:
+        destination: U142a8477cbeda0745bfe0f59ea3243fd
+        events:
+        - type: message
+          message:
+            type: text
+            id: '17009825430521'
+            text: '1'
+          webhookEventId: 01GG6RV9ZJS8AQN14THJ5N4N3Z
+          deliveryContext:
+            isRedelivery: false
+          timestamp: 1666674697719
+          source:
+            type: user
+            userId: U708d3c100a4c2c0483231b5002328428
+          replyToken: 1c3325df759a4a769183f96c12be2040
+          mode: active
+
+            
+    PublishContentData:
+      description: Example payload that ContentStack sends when content is published
+      value:
+        triggered_at: '2022-10-17T14:35:31.556Z'
+        module: entry
+        api_key: blt2233c63cb81d9b74
+        event: publish
+        bulk: true
+        data:
+          locale: en-sg
+          environment:
+            urls:
+              - url: https://cpaas-digital-message.azurewebsites.net/api
+                locale: en-gb
+              - url: https://testingsmudigitalmessage.azurewebsites.net/api
+                locale: en-sg
+            name: fyp-test-environment
+            uid: blt487064a8a6554363
+            created_by: bltf6a6d8cc54000232
+            updated_by: blt4302f6f142a635ca
+            created_at: '2022-08-31T04:29:19.482Z'
+            updated_at: '2022-10-16T17:35:05.949Z'
+            ACL: []
+            _version: 23
+          status: success
+          action: publish
+          content_type:
+            title: Cpaas Digital Message
+            description: ''
+            options:
+              is_page: true
+              singleton: false
+              sub_title: []
+              title: title
+              url_pattern: /:title
+              url_prefix: /
+            schema:
+              - data_type: text
+                display_name: Digital Message
+                field_metadata:
+                  _default: true
+                  version: 3
+                mandatory: true
+                uid: title
+                unique: true
+                multiple: false
+                non_localizable: false
+                indexed: false
+                inbuilt_model: false
+              - data_type: text
+                display_name: URL
+                uid: url
+                field_metadata:
+                  _default: true
+                  version: 3
+                multiple: false
+                unique: false
+                mandatory: false
+                non_localizable: false
+                indexed: false
+                inbuilt_model: false
+              - data_type: text
+                display_name: Content to Publlish
+                display_type: dropdown
+                enum:
+                  advanced: false
+                  choices:
+                    - value: Text
+                    - value: Image
+                    - value: Video
+                    - value: Document
+                multiple: false
+                uid: content_type
+                field_metadata:
+                  description: ''
+                  default_value: ''
+                  version: 3
+                mandatory: true
+                non_localizable: false
+                unique: false
+                indexed: false
+                inbuilt_model: false
+              - data_type: text
+                display_name: Message
+                uid: messages
+                field_metadata:
+                  description: ''
+                  default_value: ''
+                  multiline: true
+                  version: 3
+                format: ''
+                error_messages:
+                  format: ''
+                mandatory: true
+                multiple: false
+                non_localizable: false
+                unique: false
+                indexed: false
+                inbuilt_model: false
+              - data_type: file
+                display_name: Rich Media (Image, Video, Document)
+                uid: rich_media
+                extensions: []
+                field_metadata:
+                  description: ''
+                  rich_text_type: standard
+                mandatory: false
+                multiple: false
+                non_localizable: false
+                unique: false
+                indexed: false
+                inbuilt_model: false
+              - data_type: text
+                display_name: Channels to Publish
+                display_type: checkbox
+                enum:
+                  advanced: false
+                  choices:
+                    - value: WhatsApp
+                    - value: LINE
+                multiple: true
+                uid: channels_to_publish
+                field_metadata:
+                  description: ''
+                  default_value: ''
+                  version: 3
+                mandatory: true
+                non_localizable: false
+                unique: false
+                indexed: false
+                inbuilt_model: false
+            uid: cpaas_digital_message
+            non_localizable_fields: []
+            DEFAULT_ACL:
+              - k: others
+                v:
+                  read: false
+                  create: false
+              - k: users.bltab3302e2b3780d38
+                v:
+                  read: true
+                  sub_acl:
+                    read: true
+            is_global_field: false
+            SYS_ACL:
+              roles:
+                - read: true
+                  sub_acl:
+                    read: true
+                    create: true
+                    update: true
+                    publish: true
+                    delete: true
+                  uid: blta6e706fb1c5dc052
+                - read: true
+                  sub_acl:
+                    read: true
+                    create: true
+                    update: true
+                    publish: true
+                  uid: bltaee3f5befa1b98ca
+                - read: true
+                  sub_acl:
+                    read: true
+                    create: true
+                    update: true
+                    publish: true
+                  uid: blt906a2a8299b388c3
+                - read: true
+                  sub_acl:
+                    read: true
+                    create: true
+                    publish: true
+                    update: true
+                  uid: blt493be597a7c4f50c
+                - read: true
+                  sub_acl:
+                    read: true
+                    create: true
+                    update: true
+                    publish: true
+                  uid: bltc091fd7fb91c5f9a
+            created_by: blt437013b967bb61fc
+            updated_by: blt437013b967bb61fc
+            created_at: '2022-10-12T05:58:15.259Z'
+            updated_at: '2022-10-15T03:50:50.959Z'
+            global_field_refs: []
+            extension_refs: []
+            _metadata:
+              references:
+                - uid: sys_assets
+                  path: rich_media
+                  multiple: false
+            inbuilt_class: false
+            abilities:
+              get_one_object: true
+              get_all_objects: true
+              create_object: true
+              update_object: true
+              delete_object: true
+              delete_all_objects: true
+            last_activity: {}
+            maintain_revisions: true
+            _version: 22
+            tags: []
+            _branches:
+              - main
+          entry:
+            _version: 37
+            locale: en-gb
+            uid: bltd4dee6d48951b903
+            ACL: {}
+            _in_progress: false
+            _workflow:
+              uid: blt8cb81daeeb875435
+              updated_at: '2022-10-12T06:10:16.157Z'
+              updated_by: blt437013b967bb61fc
+              version: 1
+            channels_to_publish:
+              - WhatsApp
+            content_type: Video
+            created_at: '2022-10-12T06:10:16.157Z'
+            created_by: blt437013b967bb61fc
+            messages: sending from CS
+            rich_media:
+              uid: bltfd8eaad68ba48d81
+              created_at: '2022-10-16T13:06:52.978Z'
+              updated_at: '2022-10-16T13:06:52.978Z'
+              created_by: blt437013b967bb61fc
+              updated_by: blt437013b967bb61fc
+              content_type: video/mp4
+              file_size: '8244730'
+              tags: []
+              filename: video.mp4
+              url: https://eu-assets.contentstack.com/v3/assets/blt2233c63cb81d9b74/bltfd8eaad68ba48d81/634c01ec85fdb40f22d31fa5/video.mp4
+              ACL: []
+              is_dir: false
+              parent_uid: blt1ee1258d2a2be3da
+              _version: 1
+              title: video.mp4
+            tags: []
+            title: Annoucement
+            updated_at: '2022-10-17T14:35:24.845Z'
+            updated_by: blt437013b967bb61fc
+            url: /digital-message
+            publish_details:
+              user: blt437013b967bb61fc
+              time: '2022-10-17T14:35:31.285Z'
+              locale: en-sg
+              environment: blt487064a8a6554363
+      
